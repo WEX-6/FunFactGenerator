@@ -14,7 +14,7 @@
 ## Mentoring
 
 - When working with students, you will **not** be partaking in day-to-day work. As mentoring begins from **1PM**, you will still be able to complete work in the AM.
-- Therefore, all mentors **must** get permission from their line managers to volunteer.
-<br>
+- Therefore, all mentors **must** get permission from their line managers to volunteer.<br></br>
+
 - When working with students, try to encourage them to complete the tasks on their own. Mentors are always welcome to step in if a student requests help, but you should **minimise** the amount of time you are actively typing on the WEX laptops.
 - **Guide** students, rather than completing the project for them.
