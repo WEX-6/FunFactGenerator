@@ -25,11 +25,11 @@
 
 ## Project Setup
 
-### Step 1: Clone and Navigate
-```powershell
-git clone https://github.com/jasmine-smith_hpeprod/stem-work-experience-2026
-cd stem-work-experience-2026
-```
+### Step 1: Download ZIP
+**Note:** Project team will likely do this, and distribute copies to the WEX laptops.
+- https://github.com/jasmine-smith_hpeprod/stem-work-experience-2026
+- `<> Code`
+- `Download ZIP `
 
 ### Step 2: Create Virtual Environment
 ```powershell
