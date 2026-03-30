@@ -5,14 +5,7 @@ Before we begin, let us set up out developer environment. If students are strugg
 
 ## Development Instructions
 
-### To setup the database
-1. Run ```make docker-compose``` to bring up the postgres container.
-
-2. Run ```make setup-db``` to create a facts table in the database and insert some sample data.
-
-Run ```make db-shell``` to enter the database shell (useful for debugging purposes).
-
-### To run the app
+### To setup the virtual environment
 
 1. Create a virtual environment:
 
@@ -20,13 +13,29 @@ Run ```make db-shell``` to enter the database shell (useful for debugging purpos
 
 2. Activate the virtual environment:
 
-```source venv/bin/activate```
+```venv\Scripts\activate```
+
+You should now see ```(venv)``` at the beginning of your terminal.
 
 3. Install dependencies:
 
 ```pip install -r requirements.txt```
 
-4. Run the app:
+### To setup the database
+
+1. Run ```make docker-compose``` to bring up the postgres container.
+
+2. Run ```make setup-db``` to create a facts table in the database and insert some sample data.
+
+3. Verify the migration worked by running ```make db-shell``` and then executing:
+
+```SELECT * FROM facts;```
+
+**Tip:** You can run ```make db-shell``` at any time to enter the database shell (useful for debugging purposes).
+
+### To run the app
+
+1. Run the app:
 
 ```python app.py```
 
