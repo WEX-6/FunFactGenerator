@@ -1,20 +1,44 @@
-# Work Experience Mentoring - Day Structure
+# Work Experience Mentoring
 
-## Daily Structure Overview
+## Important Guidelines
 
-| Time | Activity | Description |
-|------|----------|-------------|
-| 1:00pm - 1:10pm | Standup | Brief meeting where students share:<br>• What they worked on yesterday<br>• What they plan to work on today<br>• Any blockers or questions |
-| Throughout day | Lightweight Scrum Board | Use a simple whiteboard with three columns:<br>• **To Do** - Tasks to be completed<br>• **In Progress** - Currently working on<br>• **Done** - Completed tasks<br><br>Students write tasks on post-it notes and move them across the board. |
-| 2:00pm - 2:15pm | First Break | Take students to the E-Club for a break<br>Students can grab coffee, hot chocolate, or snacks<br>Encourage stepping away from screens |
-| 3:15pm - 3:30pm | Second Break | Take students to the E-Club for a break<br>Students can grab coffee, hot chocolate, or snacks<br>Encourage stepping away from screens |
-| 3:55pm | Feedback Forms | Students complete daily feedback forms<br>Forms will be sent out on the day <br> Either QR code or paper copy |
-| 4pm | E-Club | Take students to the E-Club so they can be escorted to the exit |
+**Essential Requirements:**
+- You will **not** be doing day-to-day work while mentoring (mentoring runs from 1PM onwards, so morning work is still possible)
+- **Two mentors** must be with students at all times
+- Contact the WEX Slack channel if you need to use the toilet or step away (**#wex-mentors-2026**)
+- **Make sure** to use students preferred pronouns and names (they will have name tags with pronouns)
 
-## Mentoring
+## Working with Students
 
-- When working with students, you will **not** be partaking in day-to-day work. As mentoring begins from **1PM**, you will still be able to complete work in the AM.
-- Therefore, all mentors **must** get permission from their line managers to volunteer.<br></br>
+**Mentoring Approach:**
+- Guide students rather than completing tasks for them
+- Encourage students to complete tasks independently
+- Step in to help when requested, but **minimise** typing on WEX laptops yourself
+- **Remember** to move at the pace of the slowest student
 
-- When working with students, try to encourage them to complete the tasks on their own. Mentors are always welcome to step in if a student requests help, but you should **minimise** the amount of time you are actively typing on the WEX laptops.
-- **Guide** students, rather than completing the project for them.
+**Breaks and Wellbeing:**
+- Encourage students to take regular breaks throughout the day
+- Take students to the E-Club around 2:00pm and 3:15pm for coffee, hot chocolate, or snacks
+- Encourage them to step away from screens during breaks
+- At 3:55pm, students complete daily feedback forms (QR code or paper copy)
+- At 4pm, take students to the E-Club to be escorted to the exit
+
+**Daily Agile Practices:**
+- Start the day with a standup meeting around 1:00pm where students share:
+    - What they worked on yesterday
+    - What they plan to work on today
+    - Any blockers or questions
+- Manage a lightweight Scrum board throughout the day using a simple whiteboard with three columns: **To Do, In Progress, and Done**
+- Students write tasks on post-it notes and move them across the board as they progress
+
+## Supporting Presentations
+
+**Student Presentations:**
+- Help teams structure their 5-minute presentation (4 mins presenting + 1 min Q&A)
+- Ensure all team members have a speaking part
+- Guide students to focus on 6-8 slides covering: introduction, project overview, tech stack, implementation highlight, demo, and conclusion
+- Encourage minimal text and use of screenshots/diagrams
+- Help teams prepare backup screenshots in case live demo fails
+- Facilitate practice runs with timing feedback
+- Remind teams to speak clearly and use slides as prompts, not scripts
+- Encourage students to be proud of their accomplishments
