@@ -86,14 +86,11 @@ deactivate
 docker compose exec db psql -U postgres -d factsdb -c "DROP TABLE IF EXISTS facts CASCADE;"
 
 # Stop and remove containers
-make clean
+docker compose -f docker-compose.yaml down
 
 # Remove virtual environment folder
-Remove-Item -Recurse -Force venv
-
-# Remove any cache files
-Remove-Item -Recurse -Force __pycache__
-Get-ChildItem -Recurse -Filter "*.pyc" | Remove-Item -Force
+Remove-Item venv
+# YES to remove recursive (all)
 ```
 
 ## Troubleshooting Notes
