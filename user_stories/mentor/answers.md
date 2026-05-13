@@ -23,15 +23,13 @@ You should now see ```(venv)``` at the beginning of your terminal.
 
 ### To setup the database
 
-1. Run ```make docker-compose``` to bring up the postgres container.
+1. Run ```make setup-db``` to create the SQLite database (facts.db), create a facts table, and insert sample data.
 
-2. Run ```make setup-db``` to create a facts table in the database and insert some sample data.
-
-3. Verify the migration worked by running ```make db-shell``` and then executing:
+2. Verify the migration worked by running ```make db-shell``` and then executing:
 
 ```SELECT * FROM facts;```
 
-**Tip:** You can run ```make db-shell``` at any time to enter the database shell (useful for debugging purposes).
+**Tip:** You can run ```make db-shell``` at any time to open the SQLite database shell (useful for debugging purposes).
 
 ### To run the app
 
@@ -47,14 +45,14 @@ As an engineer, I want to be able to get a random fun fact from a database, so t
 ## Implementation Details
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 #### Steps:
 1. P0.1 Implement the `get_fact()` method in `get_fact.py`.
 
 ```python
 def get_fact() -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         cur.execute("SELECT id, fact FROM facts ORDER BY RANDOM() LIMIT 1;")
         result = cur.fetchone()
@@ -129,14 +127,14 @@ As an engineer, I want to be able to create my own fun facts, so that I can expa
 ## Implementation Details
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 #### Steps:
 1. P1.1 Implement the `create_fact()` method in `create_fact.py`.
 
 ```python
 def create_fact(fact_text: str) -> Fact: # TASK
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         cur.execute(
             "INSERT INTO facts (fact) VALUES (%s, %s) RETURNING id, fact;",
@@ -230,14 +228,14 @@ As an engineer, I want to be able to add a voting system to my fact service, so 
 ## Implementation Details
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 #### Steps:
 1. P3.1 Implement the `vote_fact()` method in `vote_fact.py`.
 
 ```python
 def vote_fact(fact_id: int, vote_type: str) -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         if vote_type == "like":
             cur.execute(
@@ -319,14 +317,14 @@ def get_route():
 ---
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 #### Steps:
 1. Implement the `vote_fact()` method in `vote_fact.py`.
 
 ```python
 def vote_fact(fact_id: int, vote_type: str) -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         if vote_type == "like":
             cur.execute(
@@ -357,7 +355,7 @@ def vote_fact(fact_id: int, vote_type: str) -> Fact:
 
 ```python
 def get_fact() -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:    #TASK
         cur.execute("SELECT id, fact, likes, dislikes FROM facts ORDER BY RANDOM() LIMIT 1;")
         result = cur.fetchone()
@@ -371,7 +369,7 @@ def get_fact() -> Fact:
 
 ```python
 def create_fact(fact_text: str, category: str) -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         cur.execute(
             "INSERT INTO facts (fact) VALUES (%s) RETURNING id, fact, category, likes, dislikes;",    # TASK
@@ -426,14 +424,14 @@ As an engineer, I want to be able to filter facts by categories, so that I can t
 ## Implementation Details
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 #### Steps:
 1. P4.1 Update the `get_fact()` method in `get_fact.py`.
 
 ```python
 def get_fact() -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:    # TASK
         cur.execute("SELECT id, fact, category, likes, dislikes FROM facts ORDER BY RANDOM() LIMIT 1;")
         result = cur.fetchone()
@@ -447,7 +445,7 @@ def get_fact() -> Fact:
 
 ```python
 def create_fact(fact_text: str, category: str) -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         cur.execute(
             "INSERT INTO facts (fact, category) VALUES (%s, %s) RETURNING id, fact, category, likes, dislikes;",    # TASK

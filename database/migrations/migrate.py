@@ -1,36 +1,32 @@
-import psycopg2
+import sqlite3
 import os
 
-conn = psycopg2.connect(
-    dbname=os.getenv("POSTGRES_DB", "factsdb"),
-    user=os.getenv("POSTGRES_USER", "postgres"),
-    password=os.getenv("POSTGRES_PASSWORD", "password"),
-    host=os.getenv("POSTGRES_HOST", "localhost"),
-    port=os.getenv("POSTGRES_PORT", "5432")
-)
+db_path = os.getenv("SQLITE_DB_PATH", "facts.db")
+conn = sqlite3.connect(db_path)
 
 # Made category nullable to avoid conflict in earlier tasks
 with conn:
-    with conn.cursor() as cur:
-        cur.execute("""
-            DROP TABLE IF EXISTS facts;
-            CREATE TABLE IF NOT EXISTS facts (
-                id SERIAL PRIMARY KEY,
-                fact TEXT NOT NULL,
-                likes INT DEFAULT 0,
-                dislikes INT DEFAULT 0,
-                category TEXT
-            );
-        """)
-        cur.execute("""
-            INSERT INTO facts (fact, category) VALUES
-            ('Honey never spoils.', 'food'),
-            ('Bananas are berries.', 'food'),
-            ('Octopuses have three hearts.', 'animal'),
-            ('A group of flamingos is called a "flamboyance".', 'animal'),
-            ('The Eiffel Tower can be 15 cm taller during hot days.', 'architecture')
-            ON CONFLICT DO NOTHING;
-        """)
+    cur = conn.cursor()
+    cur.execute("""
+        DROP TABLE IF EXISTS facts;
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS facts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fact TEXT NOT NULL,
+            likes INTEGER DEFAULT 0,
+            dislikes INTEGER DEFAULT 0,
+            category TEXT
+        );
+    """)
+    cur.execute("""
+        INSERT INTO facts (fact, category) VALUES
+        ('Honey never spoils.', 'food'),
+        ('Bananas are berries.', 'food'),
+        ('Octopuses have three hearts.', 'animal'),
+        ('A group of flamingos is called a "flamboyance".', 'animal'),
+        ('The Eiffel Tower can be 15 cm taller during hot days.', 'architecture');
+    """)
     print("Migration complete: facts table created and sample data inserted.")
 
 conn.close()

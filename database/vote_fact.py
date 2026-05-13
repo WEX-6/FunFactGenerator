@@ -1,10 +1,10 @@
 # Task P3.1
 
 from fact import Fact
-from .provider import PostgresConnectionProvider
+from .provider import SQLiteConnectionProvider
 
 def vote_fact(fact_id: int, vote_type: str) -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         if vote_type == "like":
             cur.execute() # TODO: Write the SQL query to update the likes count for the given fact_id

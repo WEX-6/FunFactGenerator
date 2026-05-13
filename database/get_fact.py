@@ -1,10 +1,10 @@
 # Tasks P0.1, P3.1, P4.1
 
 from fact import Fact
-from .provider import PostgresConnectionProvider
+from .provider import SQLiteConnectionProvider
 
 def get_fact() -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         # TODO: (Task P0.1) Write SQL query to select a random fact from the database
         cur.execute("") # SQL query goes here

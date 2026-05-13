@@ -11,23 +11,12 @@
 - **Important**: Check "Add Python to PATH" during installation
 - Verify installation: `python --version`
 
-### Step 3: Install Docker Desktop
-- Download from https://www.docker.com/products/docker-desktop/
-- Install and start Docker Desktop
-- Verify installation: `docker --version`
-
-### Step 4: Install Make
+### Step 3: Install Make (Optional)
 - Download from http://gnuwin32.sourceforge.net/packages/make.htm
 - Add to Windows PATH: `C:\Program Files (x86)\GnuWin32\bin`
 - Verify installation: `make --version`
 
-### Step 5: Install PostgreSQL Client (psql)
-- Download PostgreSQL from https://www.postgresql.org/download/windows/
-- During installation, ensure "Command Line Tools" is selected
-- Add to Windows PATH: `C:\Program Files\PostgreSQL\[version]\bin`
-- Verify installation: `psql --version`
-
-**Note:** Make and PostgreSQL will have to be added to the path manually. Go to 'Edit environment variables' on your windows laptop and click on the PATH configurations. Add the paths as above, and OK.
+**Note:** Make will have to be added to the path manually. Go to 'Edit environment variables' on your windows laptop and click on the PATH configurations. Add the path as above, and OK.
 
 ## Project Setup
 
@@ -50,21 +39,20 @@ pip install -r requirements.txt
 
 ### Step 3: Database Setup
 ```powershell
-# Start database container
-make docker-compose
-
-# Wait 10-15 seconds for initialization, then create database
-docker compose exec db psql -U postgres
-# Enter password when prompted: password
-# Run the following SQL command:
-CREATE DATABASE factsdb;
-# Exit with: \q
-
 # Setup database schema and data
 make setup-db
 
-# Test database connection
+# Or without make:
+python database/migrations/migrate.py
+
+# Test database connection (if sqlite3 is installed)
 make db-shell
+
+# Or without make:
+sqlite3 facts.db
+
+# Quit database shell
+.quit
 ```
 
 ### Step 4: Run Application
@@ -73,33 +61,26 @@ python app.py
 ```
 
 ## Expected Output Sequence
-- **Docker Compose**: Shows container starting (ignore version warning)
-- **Create Database**: PostgreSQL prompt accepts CREATE DATABASE command
 - **Setup DB**: "Migration complete: facts table created and sample data inserted."
-- **DB Shell**: Prompts for password (enter: `password`)
-- **Success**: PostgreSQL prompt `factsdb=#`
+- **DB Shell**: Opens SQLite prompt `sqlite>`
+- **Success**: Can run SQL commands like `SELECT * FROM facts;`
 
 ## Cleanup (Before Distributing to Students)
 ```powershell
 # Deactivate virtual environment
 deactivate
 
-# Empty the database
-docker compose exec db psql -U postgres -d factsdb -c "DROP TABLE IF EXISTS facts CASCADE;"
-
-# Stop and remove containers
-docker compose -f docker-compose.yaml down
+# Delete the database file
+Remove-Item facts.db
 
 # Remove virtual environment folder
-Remove-Item venv
-# YES to remove recursive (all)
+Remove-Item -Recurse -Force venv
 ```
 
 ## Troubleshooting Notes
-- If `make` fails: Use `docker compose -f docker-compose.yaml up -d db` directly
-- If `psql` fails: Ensure PostgreSQL bin directory is in PATH
-- Database password is always: `password`
-- Alternative db-shell: `docker compose exec db psql -U postgres -d factsdb`
+- If `make` fails: Run `python database/migrations/migrate.py` directly
+- Database file is stored as: `facts.db` in the project root
+- To inspect database: `sqlite3 facts.db` then run SQL commands
 
 ---
 

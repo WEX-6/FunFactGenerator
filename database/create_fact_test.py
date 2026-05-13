@@ -15,7 +15,7 @@ from fact import Fact
 class TestCreateFact:
     """Test the create_fact function"""
 
-    @patch.object(sys.modules['database.create_fact'], 'PostgresConnectionProvider')
+    @patch.object(sys.modules['database.create_fact'], 'SQLiteConnectionProvider')
     def test_create_fact_success(self, mock_provider_class):
         """Test successful fact creation"""
         # ARRANGE
@@ -38,7 +38,7 @@ class TestCreateFact:
         mock_cursor.execute.assert_called_once()
         mock_provider.commit.assert_called_once()
 
-    @patch.object(sys.modules['database.create_fact'], 'PostgresConnectionProvider')
+    @patch.object(sys.modules['database.create_fact'], 'SQLiteConnectionProvider')
     def test_create_fact_with_null_likes_dislikes(self, mock_provider_class):
         """Test fact creation when likes/dislikes are NULL in database"""
         # ARRANGE
@@ -56,7 +56,7 @@ class TestCreateFact:
         # ASSERT
         # TODO: Check if returned fact fields match what we expect 
 
-    @patch.object(sys.modules['database.create_fact'], 'PostgresConnectionProvider')
+    @patch.object(sys.modules['database.create_fact'], 'SQLiteConnectionProvider')
     def test_create_fact_empty_strings(self, mock_provider_class):
         """Test fact creation with empty strings"""
         # ARRANGE

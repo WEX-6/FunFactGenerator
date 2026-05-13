@@ -1,18 +1,18 @@
 import os
-import psycopg2
+import sqlite3
 
-class PostgresConnectionProvider:
-    def __init__(self):
-        self.conn = psycopg2.connect(
-            dbname=os.getenv("POSTGRES_DB", "factsdb"),
-            user=os.getenv("POSTGRES_USER", "postgres"),
-            password=os.getenv("POSTGRES_PASSWORD", "password"),
-            host=os.getenv("POSTGRES_HOST", "localhost"),
-            port=os.getenv("POSTGRES_PORT", "5432")
-        )
+class SQLiteConnectionProvider:
+    def __init__(self, db_path=None):
+        if db_path is None:
+            db_path = os.getenv("SQLITE_DB_PATH", "facts.db")
+        self.conn = sqlite3.connect(db_path)
+        self.conn.row_factory = sqlite3.Row  # Enable column access by name
+    
     def cursor(self):
         return self.conn.cursor()
+    
     def commit(self):
         self.conn.commit()
+    
     def close(self):
         self.conn.close()

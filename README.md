@@ -14,7 +14,7 @@ This is a web application that serves as an educational platform for HPE's STEM 
 The application is designed to teach work experience students:
 - **Web development fundamentals** (HTML, CSS, JavaScript)
 - **Backend development** with Python Flask
-- **Database operations** using PostgreSQL and SQL
+- **Database operations** using SQLite
 - **REST API concepts** and CRUD operations
 - **Testing methodologies** using the Arrange-Act-Assert pattern
 - **Project structure** demonstrating best practices
@@ -24,12 +24,20 @@ The codebase includes comprehensive worksheets and guides covering database conc
 # Development Instructions
 
 ## To setup the database
-1. Run ```make docker-compose``` to bring up the postgres container.
 
-2. Run ```make setup-db``` to create a facts table in the database and insert some sample data.
+1. Create the SQLite database (facts.db), create a facts table, and insert sample data:
 
-3. Run ```make db-shell``` to enter the database shell (useful for debugging purposes).
+```make setup-db```
 
+## To inspect the database
+
+1. Open the SQLite shell (useful for debugging purposes):
+
+```make db-shell```
+
+2. Exit the SQLite shell:
+
+```.quit```
 
 ## To run the app
 

@@ -1,14 +1,9 @@
-## docker-compose: Start the Docker container for the database.
-.PHONY: docker-compose
-docker-compose:
-	docker compose -f docker-compose.yaml up -d db
-
-## setup-db: Set up the database.
+## setup-db: Set up the SQLite database.
 .PHONY: setup-db
 setup-db:
 	python3 database/migrations/migrate.py
 
-## db-shell: Enter the facts database.
+## db-shell: Open the SQLite database shell.
 .PHONY: db-shell
 db-shell:
-	psql -h localhost -U postgres -d factsdb
+	sqlite3 facts.db

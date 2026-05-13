@@ -36,15 +36,13 @@ You should now see ```(venv)``` at the beginning of your terminal.
 
 ### To setup the database
 
-1. Run ```make docker-compose``` to bring up the postgres container.
+1. Run ```make setup-db``` to create the SQLite database (facts.db), create a facts table, and insert sample data.
 
-2. Run ```make setup-db``` to create a facts table in the database and insert some sample data.
-
-3. Verify the migration worked by running ```make db-shell``` and then executing:
+2. Verify the migration worked by running ```make db-shell``` and then executing:
 
 ```SELECT * FROM facts;```
 
-**Tip:** You can run ```make db-shell``` at any time to enter the database shell (useful for debugging purposes).
+**Tip:** You can run ```make db-shell``` at any time to open the SQLite database shell (useful for debugging purposes).
 
 ### To run the app
 
@@ -58,7 +56,7 @@ As an engineer, I want to be able to get a random fun fact from a database, so t
 ## Implementation Details
 
 ### Database Layer
-The database implementation fetches a single random fact from the PostgreSQL database.
+The database implementation fetches a single random fact from the SQLite database.
 
 You can complete the [SQL worksheet](../../database/worksheet.md) before moving on to the next steps.
 

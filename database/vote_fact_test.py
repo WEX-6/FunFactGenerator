@@ -15,8 +15,8 @@ from fact import Fact
 class TestVoteFact:
     """Test the vote_fact function"""
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_like_success(self, mock_provider_class):
         """Test successful like vote on a fact"""
         # ARRANGE
@@ -44,18 +44,18 @@ class TestVoteFact:
         assert mock_cursor.execute.call_count == 2
         # Check like update query
         mock_cursor.execute.assert_any_call(
-            "UPDATE facts SET likes = likes + 1 WHERE id = %s;",
+            "UPDATE facts SET likes = likes + 1 WHERE id = ?;",
             (1,)
         )
         # Check select query
         mock_cursor.execute.assert_any_call(
-            "SELECT id, fact, category, likes, dislikes FROM facts WHERE id = %s;",
+            "SELECT id, fact, category, likes, dislikes FROM facts WHERE id = ?;",
             (1,)
         )
         mock_provider.commit.assert_called_once()
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_dislike_success(self, mock_provider_class):
         """Test successful dislike vote on a fact"""
         # ARRANGE
@@ -78,18 +78,18 @@ class TestVoteFact:
         assert mock_cursor.execute.call_count == 2
         # Check dislike update query
         mock_cursor.execute.assert_any_call(
-            "UPDATE facts SET dislikes = dislikes + 1 WHERE id = %s;",
+            "UPDATE facts SET dislikes = dislikes + 1 WHERE id = ?;",
             (2,)
         )
         # Check select query
         mock_cursor.execute.assert_any_call(
-            "SELECT id, fact, category, likes, dislikes FROM facts WHERE id = %s;",
+            "SELECT id, fact, category, likes, dislikes FROM facts WHERE id = ?;",
             (2,)
         )
         mock_provider.commit.assert_called_once()
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_invalid_vote_type(self, mock_provider_class):
         """Test error handling for invalid vote type"""
         # ARRANGE
@@ -110,8 +110,8 @@ class TestVoteFact:
         mock_cursor.execute.assert_not_called()
         mock_provider.commit.assert_not_called()
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_empty_vote_type(self, mock_provider_class):
         """Test error handling for empty vote type"""
         # ARRANGE
@@ -130,8 +130,8 @@ class TestVoteFact:
         mock_cursor.execute.assert_not_called()
         mock_provider.commit.assert_not_called()
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_with_null_likes_dislikes(self, mock_provider_class):
         """Test voting on fact with NULL likes/dislikes"""
         # ARRANGE
@@ -150,8 +150,8 @@ class TestVoteFact:
         # ASSERT
         # TODO: Verify that the returned Fact object handles NULL likes/dislikes appropriately
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.vote_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.vote_fact'], 'SQLiteConnectionProvider')
     def test_vote_fact_cursor_context_manager(self, mock_provider_class):
         """Test that cursor context manager is used properly"""
         # ARRANGE

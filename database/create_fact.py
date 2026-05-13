@@ -1,12 +1,12 @@
 # Tasks P1.1, P3.1, P4.2
 
 from fact import Fact
-from .provider import PostgresConnectionProvider
+from .provider import SQLiteConnectionProvider
 
 # TODO: (Task P1.1) Add fact_text parameter
 # TODO: (Task P4.2) Add category parameter
 def create_fact() -> Fact:
-    provider = PostgresConnectionProvider()
+    provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         # TODO: (Task P1.1) Write SQL query to add new fact to the database
         # TODO: (Task P3.1) Add likes and dislikes counts to SQL query

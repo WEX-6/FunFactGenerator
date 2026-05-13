@@ -15,8 +15,8 @@ from fact import Fact
 class TestGetFact:
     """Test the get_fact function"""
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.get_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.get_fact'], 'SQLiteConnectionProvider')
     def test_get_fact_success(self, mock_provider_class):
         """Test successful fact retrieval"""
         # ARRANGE
@@ -45,8 +45,8 @@ class TestGetFact:
             "SELECT id, fact, category, likes, dislikes FROM facts ORDER BY RANDOM() LIMIT 1;"
         )
 
-    # Patch the PostgresConnectionProvider to mock database interactions
-    @patch.object(sys.modules['database.get_fact'], 'PostgresConnectionProvider')
+    # Patch the SQLiteConnectionProvider to mock database interactions
+    @patch.object(sys.modules['database.get_fact'], 'SQLiteConnectionProvider')
     def test_get_fact_with_null_likes_dislikes(self, mock_provider_class):
         """Test fact retrieval when likes/dislikes are NULL in database"""
         # ARRANGE
@@ -65,7 +65,7 @@ class TestGetFact:
         # ASSERT
         # TODO: Verify that the Fact object is created with default values for likes/dislikes
 
-    @patch.object(sys.modules['database.get_fact'], 'PostgresConnectionProvider')
+    @patch.object(sys.modules['database.get_fact'], 'SQLiteConnectionProvider')
     def test_get_fact_no_results_found(self, mock_provider_class):
         """Test behavior when no facts are found in database"""
         # ARRANGE
@@ -87,7 +87,7 @@ class TestGetFact:
         # Verify SQL execution
         mock_cursor.execute.assert_called_once()
 
-    @patch.object(sys.modules['database.get_fact'], 'PostgresConnectionProvider')
+    @patch.object(sys.modules['database.get_fact'], 'SQLiteConnectionProvider')
     def test_get_fact_database_error(self, mock_provider_class):
         """Test handling of database errors during fact retrieval"""
         # ARRANGE

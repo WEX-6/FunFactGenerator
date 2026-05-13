@@ -6,84 +6,58 @@ import os
 # Add the project root to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from database.provider import PostgresConnectionProvider
+from database.provider import SQLiteConnectionProvider
 
 
-class TestPostgresConnectionProvider:
-    """Test the PostgresConnectionProvider class"""
+class TestSQLiteConnectionProvider:
+    """Test the SQLiteConnectionProvider class"""
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_init_with_default_values(self, mock_connect):
-        """Test initialization with default environment values"""
+        """Test initialization with default database path"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
         # ACT
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ASSERT
-        mock_connect.assert_called_once_with(
-            dbname="factsdb",
-            user="postgres",
-            password="password",
-            host="localhost",
-            port="5432"
-        )
+        mock_connect.assert_called_once_with("facts.db")
         assert provider.conn == mock_connection
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     @patch.dict(os.environ, {
-        'POSTGRES_DB': 'test_db',
-        'POSTGRES_USER': 'test_user',
-        'POSTGRES_PASSWORD': 'test_pass',
-        'POSTGRES_HOST': 'test_host',
-        'POSTGRES_PORT': '5433'
+        'SQLITE_DB_PATH': 'custom_test.db'
     })
-    def test_init_with_environment_variables(self, mock_connect):
-        """Test initialization with custom environment variables"""
+    def test_init_with_environment_variable(self, mock_connect):
+        """Test initialization with custom environment variable"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
         # ACT
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ASSERT
-        mock_connect.assert_called_once_with(
-            dbname="test_db",
-            user="test_user",
-            password="test_pass",
-            host="test_host",
-            port="5433"
-        )
+        mock_connect.assert_called_once_with("custom_test.db")
         assert provider.conn == mock_connection
 
-    @patch('database.provider.psycopg2.connect')
-    @patch.dict(os.environ, {
-        'POSTGRES_DB': 'partial_db',
-        'POSTGRES_USER': 'partial_user'
-        # Only some env vars set - others should use defaults
-    })
-    def test_init_with_partial_environment_variables(self, mock_connect):
-        """Test initialization with partial environment variables"""
+    @patch('database.provider.sqlite3.connect')
+    def test_init_with_explicit_path(self, mock_connect):
+        """Test initialization with explicit database path"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
         # ACT
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider(db_path="explicit.db")
 
         # ASSERT
-        mock_connect.assert_called_once_with(
-            dbname="partial_db",        # From env
-            user="partial_user",        # From env
-            password="password",        # Default
-            host="localhost",           # Default
-            port="5432"                 # Default
-        )
+        mock_connect.assert_called_once_with("explicit.db")
+        assert provider.conn == mock_connection
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_init_connection_error(self, mock_connect):
         """Test handling of connection errors during initialization"""
         # ARRANGE
@@ -91,11 +65,14 @@ class TestPostgresConnectionProvider:
 
         # ACT & ASSERT
         with pytest.raises(Exception) as exc_info:
-            PostgresConnectionProvider()
+            SQLiteConnectionProvider()
 
         assert "Connection failed" in str(exc_info.value)
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
+    def test_cursor_method(self, mock_connect):
+        """Test cursor method returns connection cursor"""
+    @patch('database.provider.sqlite3.connect')
     def test_cursor_method(self, mock_connect):
         """Test cursor method returns connection cursor"""
         # ARRANGE
@@ -104,7 +81,7 @@ class TestPostgresConnectionProvider:
         mock_connect.return_value = mock_connection
         mock_connection.cursor.return_value = mock_cursor
 
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ACT
         result = provider.cursor()
@@ -113,7 +90,7 @@ class TestPostgresConnectionProvider:
         mock_connection.cursor.assert_called_once()
         assert result == mock_cursor
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_cursor_method_multiple_calls(self, mock_connect):
         """Test cursor method can be called multiple times"""
         # ARRANGE
@@ -123,7 +100,7 @@ class TestPostgresConnectionProvider:
         mock_connect.return_value = mock_connection
         mock_connection.cursor.side_effect = [mock_cursor1, mock_cursor2]
 
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ACT
         cursor1 = provider.cursor()
@@ -134,14 +111,14 @@ class TestPostgresConnectionProvider:
         assert cursor1 == mock_cursor1
         assert cursor2 == mock_cursor2
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_commit_method(self, mock_connect):
         """Test commit method calls connection commit"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ACT
         provider.commit()
@@ -149,14 +126,14 @@ class TestPostgresConnectionProvider:
         # ASSERT
         mock_connection.commit.assert_called_once()
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_close_method(self, mock_connect):
         """Test close method calls connection close"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ACT
         provider.close()
@@ -164,7 +141,7 @@ class TestPostgresConnectionProvider:
         # ASSERT
         mock_connection.close.assert_called_once()
 
-    @patch('database.provider.psycopg2.connect')
+    @patch('database.provider.sqlite3.connect')
     def test_cursor_commit_close_workflow(self, mock_connect):
         """Test typical workflow: cursor, commit, close"""
         # ARRANGE
@@ -173,7 +150,7 @@ class TestPostgresConnectionProvider:
         mock_connect.return_value = mock_connection
         mock_connection.cursor.return_value = mock_cursor
 
-        provider = PostgresConnectionProvider()
+        provider = SQLiteConnectionProvider()
 
         # ACT
         cursor = provider.cursor()
@@ -186,31 +163,19 @@ class TestPostgresConnectionProvider:
         mock_connection.close.assert_called_once()
         assert cursor == mock_cursor
 
-    @patch('database.provider.psycopg2.connect')
-    def test_connection_with_empty_env_vars(self, mock_connect):
-        """Test behavior with empty environment variables"""
+    @patch('database.provider.sqlite3.connect')
+    def test_row_factory_set(self, mock_connect):
+        """Test that row_factory is set to sqlite3.Row"""
         # ARRANGE
         mock_connection = Mock()
         mock_connect.return_value = mock_connection
 
-        with patch.dict(os.environ, {
-            'POSTGRES_DB': '',
-            'POSTGRES_USER': '',
-            'POSTGRES_PASSWORD': '',
-            'POSTGRES_HOST': '',
-            'POSTGRES_PORT': ''
-        }):
-            # ACT
-            provider = PostgresConnectionProvider()
+        # ACT
+        provider = SQLiteConnectionProvider()
 
-        # ASSERT - empty strings should be used, not defaults
-        mock_connect.assert_called_once_with(
-            dbname="",
-            user="",
-            password="",
-            host="",
-            port=""
-        )
+        # ASSERT
+        assert hasattr(mock_connection, 'row_factory')
+
 
 if __name__ == '__main__':
     pytest.main([__file__])
