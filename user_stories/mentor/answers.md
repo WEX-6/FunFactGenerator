@@ -157,7 +157,7 @@ The handler bridges the database layer and the UI layer, allowing the random fac
 def create_route():
     if request.method == "GET":
         return render_template("create.html")
-        #GET method to render the create form
+        # GET method to render the create form
     if request.method == "POST":
         fact_text = request.form.get("fact_text")
         if not fact_text:
@@ -409,7 +409,50 @@ def create_app():
 
 ---
 
-### Unit Tests (P3.4)
+### Frontend (HTML and JavaScript)
+#### Steps
+
+1. P3.4 Update the `vote(type, factId)` function in `generate.html`.
+
+```javascript
+async function vote(type, factId) {
+    if (!factId) {
+        console.error('No fact ID provided');
+        return;
+    }
+    const url = '/api/vote'; // TASK
+    const likeCount = document.getElementById(`like-count-${factId}`); // TASK
+    const dislikeCount = document.getElementById(`dislike-count-${factId}`); // TASK
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // TASK
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fact_id: factId, vote_type: type }) // TASK
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error voting:', errorData.error);
+            return;
+        }
+
+        // Get the data with the new like/dislike count from the response
+        const data = await response.json();
+        if (type === 'like') {
+            likeCount.textContent = data.new_count; // TASK
+        } else {
+            dislikeCount.textContent = data.new_count; // TASK
+        }
+    } catch (error) {
+        console.error('Error voting:', error);
+    }
+}
+```
+
+---
+
+### Unit Tests (P3.5)
 1. Add unit tests to cover the vote fact logic.
 2. Place tests in the same directory as the original file, following the convention `filename_test.py`.
 3. Reference the given happy path & unit test guide located in the same folder and encourage students to think about negative cases to improve test coverage.
@@ -430,21 +473,39 @@ The database implementation fetches a single random fact from the SQLite databas
 1. P4.1 Update the `get_fact()` method in `get_fact.py`.
 
 ```python
-def get_fact() -> Fact:
+def get_fact(category: Optional[str] = None) -> Fact: # TASK
     provider = SQLiteConnectionProvider()
-    with provider.cursor() as cur:    # TASK
-        cur.execute("SELECT id, fact, category, likes, dislikes FROM facts ORDER BY RANDOM() LIMIT 1;")
+    with provider.cursor() as cur:
+        if category:
+            cur.execute( # TASK
+                "SELECT id, fact, category, likes, dislikes FROM facts WHERE category = %s ORDER BY RANDOM() LIMIT 1;",
+                (category,)
+            )
+        else:
+            cur.execute("SELECT id, fact, category, likes, dislikes FROM facts ORDER BY RANDOM() LIMIT 1;") # TASK
         result = cur.fetchone()
-        if result:                                      # TASK
-            return Fact(id=result[0], fact=result[1], category=result[2], likes=result[3], dislikes=result[4])
-        else:                                           # TASK
-            return Fact(id=None, fact="No facts found.", category="none", likes=0, dislikes=0)
+        if result:
+            return Fact(id=result[0], fact=result[1], category=result[2], likes=result[3], dislikes=result[4]) # TASK
+        else:
+            return Fact(id=None, fact="No facts found", category=None, likes=0, dislikes=0) # TASK
 ```
 
-2. P4.2 Update the `create_fact()` method in `create_fact.py`.
+2. P4.2 Update the `get_categories()` method in `get_fact.py`.
 
 ```python
-def create_fact(fact_text: str, category: str) -> Fact:
+def get_categories() -> List[str]:
+    provider = SQLiteConnectionProvider()
+    with provider.cursor() as cur:
+        cur.execute("SELECT DISTINCT category FROM facts WHERE category IS NOT NULL ORDER BY category;") # TASK
+        rows = cur.fetchall()
+        return [row[0] for row in rows]
+
+```
+
+2. P4.3 Update the `create_fact()` method in `create_fact.py`.
+
+```python
+def create_fact(fact_text: str, category: str) -> Fact: # TASK
     provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
         cur.execute(
@@ -456,7 +517,7 @@ def create_fact(fact_text: str, category: str) -> Fact:
         return Fact(id=result[0], fact=result[1], category=result[2], likes=result[3] or 0, dislikes=result[4] or 0)    # TASK
 ```
 
-3. P4.3 Update the `Fact` constructor in `fact.py`.
+3. P4.4 Update the `Fact` constructor in `fact.py`.
 
 ```python
 class Fact:
@@ -476,12 +537,19 @@ class Fact:
 The handler bridges the database layer and the UI layer, allowing the random fact generator page to display facts and fetch new ones without page refreshes. 
 
 #### Steps:
-1. P4.3 Update the `get_route()` method in `get_fact.py`.
+1. P4.5 Update the `get_route()` method in `get_fact.py`.
 
 ```python
 def get_route():
-    fact = get_fact()
+    # Read optional category filter from query params
+    category = request.args.get("category") or None # TASK
+
+    # Call database function to get a random fact, filtered by category if provided
+    fact = get_fact(category=category)
+
+    # Check if the client wants JSON response based on query parameters
     wants_json = request.args.get("json") in ("1", "true", "True")
+
     if wants_json:
         return jsonify({
             "id": getattr(fact, "id", None),
@@ -492,13 +560,21 @@ def get_route():
         })
     return render_template("generate.html",
                          random_fact=fact.fact,
-                         random_fact_category=fact.category, #TASK
                          random_fact_id=fact.id,
+                         random_fact_category=getattr(fact, "category", "Uncategorized"), # TASK
                          random_fact_likes=getattr(fact, "likes", 0),
                          random_fact_dislikes=getattr(fact, "dislikes", 0))
 ```
 
-2. P4.4 Update the `create_route()` method in `create_fact.py`.
+2. P4.6 Update the `get_categories_route()` method in `get_categories.py`.
+
+```python
+def get_categories_route():
+    categories = get_categories() # TASK
+    return jsonify({"categories": categories})
+```
+
+3. P4.7 Update the `create_route()` method in `create_fact.py`.
 
 ```python
 def create_route():
@@ -513,10 +589,127 @@ def create_route():
         return render_template("create.html", random_fact=fact_create_entity.fact, category=fact_create_entity.category) # TASK
 ```
 
+4. P4.8 Add an `api/categories` route with a `GET` method to `router.py`.
+
+```python
+from flask import Flask
+from .home import home_route
+from .get_fact import get_route
+from .create_fact import create_route
+from .vote_fact import vote_route
+from .get_categories import get_categories_route # TASK
+
+def create_app():
+    app = Flask(__name__,
+                template_folder='../templates',
+                static_folder='../static')
+    app.add_url_rule("/", view_func=home_route, methods=["GET"])
+    app.add_url_rule("/generate", view_func=get_route, methods=["GET"])
+    app.add_url_rule("/create", view_func=create_route, methods=["GET","POST"])
+    app.add_url_rule("/api/vote", view_func=vote_route, methods=["POST"])
+    app.add_url_rule("/api/categories", view_func=get_categories_route, methods=["GET"]) # TASK
+
+    return app
+```
+
 ---
 
-### Unit Tests (P4.5)
+### Frontend (HTML and JavaScript)
+
+#### Steps
+1. P4.9 Update the `loadCategories()` function in `generate.html`.
+
+```javascript
+async function loadCategories() {
+    try {
+        const response = await fetch('/api/categories'); // TASK
+        const data = await response.json();
+        const select = document.getElementById('category-filter');
+        data.categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+}
+```
+
+2. P4.10 Update `generate.html` to include a category filtering dropdown with an id of `category-filter` and display the category with the `fact-category` id on the text.
+
+```html
+<div class="main-container">
+    <h1>Random Fact Generator</h1>
+    <!-- TASK -->
+    <div class="filter-container">
+        <label for="category-filter">Filter by category:</label>
+        <select id="category-filter" class="category-filter" onchange="getNewFact()">
+            <option value="">All categories</option>
+        </select>
+    </div>
+
+    <div class="fact-container">
+        <!-- TASK -->
+        <p>Your random <strong id="fact-category">{{ random_fact_category }}</strong> fact is: </p>
+        <strong id="fact-text">{{ random_fact }}</strong>
+    </div>
+    ...
+</div>
+```
+
+3. P4.11 Update the `loadCategories()` function in `create.html`.
+
+```javascript
+async function loadCategories() {
+    try {
+        const response = await fetch('/api/categories'); // TASK
+        const data = await response.json();
+        const select = document.getElementById('category-select');
+        data.categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+}
+```
+
+4. P4.12 Update `create.html` to include a category textarea with the name `fact_text` and display the created category.
+
+```html
+<h1>Create a New Fact</h1>
+    <div class="create-fact-container" id="createForm">
+        <form action="/create" method="POST">
+            <!-- TASK -->
+            <textarea name="fact_text" placeholder="Enter your fact here..." required></textarea>
+            <button type="submit" class="fact-generator-button">Submit</button>
+        </form>
+    </div>
+
+    {% if random_fact %}
+    <div id="factDisplay">
+        <div class="fact-container">
+            <p>New fact created:</p>
+            <strong>{{ random_fact.fact }}</strong>
+            {% if random_fact_category %}
+            <!-- TASK-->
+            <p>Category: <strong>{{ random_fact_category }}</strong></p>
+            {% endif %}
+        </div>
+        <button type="button" class="fact-generator-button" onclick="showCreateForm()">Create New Fact</button>
+    </div>
+    {% endif %}
+</div>
+```
+
+---
+
+### Unit Tests (P4.13)
 1. Add unit tests to cover the fact filtering logic.
 2. Place tests in the same directory as the original file, following the convention `filename_test.py`.
 3. Reference the given happy path & unit test guide located in the same folder and encourage students to think about negative cases to improve test coverage.
-

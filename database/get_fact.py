@@ -1,8 +1,10 @@
 # Tasks P0.1, P3.1, P4.1
 
+from typing import List, Optional
 from fact import Fact
 from .provider import SQLiteConnectionProvider
 
+# TODO: (Task P4.1) Add optional category parameter to function definition
 def get_fact() -> Fact:
     provider = SQLiteConnectionProvider()
     with provider.cursor() as cur:
@@ -18,3 +20,10 @@ def get_fact() -> Fact:
             return Fact()
         else:
             return Fact() # TODO: (Task P0.1) Create and return an empty Fact object if no result is found
+
+def get_categories() -> List[str]:
+    provider = SQLiteConnectionProvider()
+    with provider.cursor() as cur:
+        cur.execute("") # TODO: (Task P4.2) Write SQL query to get distinct categories from the database
+        rows = cur.fetchall()
+        return [row[0] for row in rows]

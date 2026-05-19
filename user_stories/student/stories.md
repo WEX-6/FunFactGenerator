@@ -203,8 +203,18 @@ As an engineer, I want to be able to add a voting system to my fact service, so 
 
 ---
 
+### Frontend (HTML and JavaScript)
+**P3.4 Update the vote function** in `generate.html`:
+   - Set the correct URL for the vote endpoint
+   - Set the correct IDs for the like and dislike count elements based on the fact ID
+   - Set the HTTP method for the fetch call
+   - Include the fact ID and vote type in the request body
+   - Update the like and dislike count on the page to use the updated like/dislike count
+
+---
+
 ### Unit Tests
-**P3.4 Test the voting functionality**:
+**P3.5 Test the voting functionality**:
    - Test successful like and dislike votes
    - Test invalid vote types
    - Test voting on non-existent facts
@@ -221,15 +231,18 @@ First, we want to modify our existing workflows to include category information,
 ### Database Layer
 #### Steps:
 **P4.1 Update the get_fact function** in `database/get_fact.py`:
-   - Modify the SQL query to include the category column
-   - Update the Fact object creation to include category information
+   - Modify the SQL queries to include the category column
+   - Update the Fact object creations to include category information
 
-**P4.2 Update the create_fact function** in `database/create_fact.py`:
+**P4.2 Update the get_categories function** in `database/get_fact.py`:
+   - Add the SQL query to select distinct categories from the database
+
+**P4.3 Update the create_fact function** in `database/create_fact.py`:
    - Add category as an input parameter
    - Modify the SQL query to include the category column
    - Update the Fact object creation to include category information
 
-**P4.3 Update the Fact entity** in `fact.py`:
+**P4.4 Update the Fact entity** in `fact.py`:
    - Store category information as a variable in the entity
    - Add category information to the string representation
 
@@ -237,33 +250,43 @@ First, we want to modify our existing workflows to include category information,
 
 ### HTTP Handler (REST)
 #### Steps:
-**P4.4 Update the get_route function** in `rest/get_fact.py`:
+**P4.5 Update the get_route function** in `rest/get_fact.py`:
+   - Get category from query parameters if provided, or set to None if not provided
    - Include category information in JSON responses
    - Pass category data to the HTML template
 
-**P4.5 Update the create_route function** in `rest/create_fact.py`:
+**P4.6 Update the get_categories_route function** in `rest/get_fact.py`:
+   - Get the categories from the database
+
+**P4.7 Update the create_route function** in `rest/create_fact.py`:
    - Get the category data from the form
    - Pass the category data to the render_template function
+
+**P4.8 Add an `api/categories` route with a `GET` method** to `router.py`:
+   - Import the get_categories_route function
+   - Add a URL rule for the get_categories route
+
+---
+
+### Frontend (HTML and JavaScript)
+#### Steps:
+**P4.9 Update the loadCategories function** in `generate.html`:
+   - Update the URL to use the categories endpoint
+
+**P4.10 Add HTML** t0 `generate.html`:
+   - Add a category filtering dropdown with the `category-filter` id
+   - Display the category and add the `fact-category` id to the text
+
+**P4.11 Update the loadCategories function** in `create.html`:
+   - Update the URL to use the categories endpoint
+
+**P4.12 Add HTML** to `create.html`:
+   - Add a category textarea with the name `fact_text`
+   - Display the created fact's category
 
 ---
 
 ### Unit Tests
 #### Steps:
-**P4.6 Update the unit tests**:
+**P4.13 Update the unit tests**:
    - Update any implemented unit tests to include the addition of a category field.
----
-
-### HTML Integration
-**P4.7 Update the generate template** in `templates/generate.html`:
-   - Display the fact category in the user interface
-   - Update JavaScript to handle category information when fetching new facts
-   - Style the category display appropriately
-
-**P4.8 Update the create template** in `templates/create.html`:
-   - Add a category textarea to the input form.
-   - Display the fact category in the user interface
----
-
-Now that we are able to handle categories in our existing workflows, we can enhance them by adding the ability to filter facts by categories.
-
-TODO: Write the code and tasks for this bit

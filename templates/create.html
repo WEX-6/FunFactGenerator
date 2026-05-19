@@ -15,7 +15,7 @@
             <div class="create-fact-container" id="createForm">
                 <form action="/create" method="POST">
                     <textarea name="fact_text" placeholder="Enter your fact here..." required></textarea>
-                    <!-- TODO: Add a category textarea-->>
+                    <!-- TODO: (Task P4.12) Add a category textarea-->
                     <button type="submit" class="fact-generator-button">Submit</button>
                 </form>
             </div>
@@ -26,7 +26,7 @@
                     <p>New fact created:</p>
                     <strong>{{ random_fact }}</strong>
                     {% if category %}
-                    <!-- TODO: Display category here-->>
+                    <!-- TODO: (Task P4.12) Display category here-->>
                     {% endif %}
                 </div>
                 <button type="button" class="fact-generator-button" onclick="showCreateForm()">Create New Fact</button>
@@ -39,7 +39,24 @@
     </div>
 
     <script>
+        async function loadCategories() {
+            try {
+                const response = await fetch(''); // TODO: (Task P4.11) Update the URL to the correct endpoint
+                const data = await response.json();
+                const select = document.getElementById('category-select');
+                data.categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
             const factDisplay = document.getElementById('factDisplay');
             const createForm = document.getElementById('createForm');
 

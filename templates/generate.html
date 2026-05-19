@@ -11,8 +11,9 @@
 
         <div class="main-container">
             <h1>Random Fact Generator</h1>
+            <!-- TODO: (Task P4.10) Add the filter container to get a new fact when the category filter changes -->
             <div class="fact-container">
-                <!-- TODO: Display the fact category here -->
+                <!-- TODO: (Task P4.10) Display the fact category here -->
                 <strong id="fact-text">{{ random_fact }}</strong>
             </div>
             <div class="voting-container">
@@ -39,10 +40,27 @@
     </div>
 
     <script>
+        async function loadCategories() {
+            try {
+                const response = await fetch(''); // TODO: (Task P4.9) Update the URL to the correct endpoint
+                const data = await response.json();
+                const select = document.getElementById('category-filter');
+                data.categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
         async function getNewFact() {
             const button = document.querySelector('.fact-generator-button');
             const buttonText = document.getElementById('button-text');
             const factText = document.getElementById('fact-text');
+            const selectedCategory = document.getElementById('category-filter').value;
             
             // Show loading state
             buttonText.textContent = 'Loading...';
@@ -50,7 +68,10 @@
             
             try {
                 // Call /generate expecting JSON when json=1 query param is present
-                const response = await fetch('/generate?json=1', {
+                const url = selectedCategory
+                    ? `/generate?json=1&category=${encodeURIComponent(selectedCategory)}`
+                    : '/generate?json=1';
+                const response = await fetch(url, {
                     headers: { 'Accept': 'application/json' }
                 });
                 let data;
@@ -99,22 +120,22 @@
                 button.disabled = false;
             }
         }
-    </script>
-    <script>
+
+        document.addEventListener('DOMContentLoaded', loadCategories);
         async function vote(type, factId) {
             if (!factId) {
                 console.error('No fact ID provided');
                 return;
             }
-            const url = ''; // TODO: Set the correct URL for the vote endpoint
-            const likeCount = document.getElementById(``); // TODO: Set the correct ID for the like count element based on the fact ID
-            const dislikeCount = document.getElementById(``); // TODO: Set the correct ID for the dislike count element based on the fact ID
+            const url = ''; // TODO: (Task P3.4) Set the correct URL for the vote endpoint
+            const likeCount = document.getElementById(``); // TODO: (Task P3.4) Set the correct ID for the like count element based on the fact ID
+            const dislikeCount = document.getElementById(``); // TODO: (Task P3.4) Set the correct ID for the dislike count element based on the fact ID
 
             try {
                 const response = await fetch(url, {
-                    method: '', // TODO: Set the HTTP method
+                    method: '', // TODO: (Task P3.4) Set the HTTP method
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({  }) // TODO: Include the fact ID and vote type in the request body
+                    body: JSON.stringify({  }) // TODO: (Task P3.4) Include the fact ID and vote type in the request body
                 });
 
                 if (!response.ok) {
@@ -126,9 +147,9 @@
                 // Get the data with the new like/dislike count from the response
                 const data = await response.json();
                 if (type === 'like') {
-                    // TODO: Update the like count on the page to use the new like count
+                    // TODO: (Task P3.4) Update the like count on the page to use the new like count
                 } else {
-                    // TODO: Update the dislike count on the page to use the new dislike count
+                    // TODO: (Task P3.4) Update the dislike count on the page to use the new dislike count
                 }
             } catch (error) {
                 console.error('Error voting:', error);

@@ -227,6 +227,16 @@ body {
     margin-bottom: 2rem;
 }
 
+.category-filter {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #292121;
+    background-color: rgba(241, 241, 241, 0.8);
+    backdrop-filter: blur(10px);
+    color: #1d1717;
+}
+
 .fact-generator-button {
     /*TASK: Choose font for your home page fact generator button text */
     font-family: 'Inter', sans-serif;
