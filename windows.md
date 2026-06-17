@@ -74,7 +74,27 @@ git clone git@github-stem:jasmine-smith_hpeprod/stem-work-experience-2026.git
 cd stem-work-experience-2026
 ```
 
-### Step 4: Create Virtual Environment
+### Step 4: Create Personal Access Token + Test Access
+
+1. On the WEX GitHub account, generate a PAT with read + write content permissions.
+2. Copy this key to a text file, saving at the user root (WEX[No]) as `git_password.txt`
+3. Create a blank repository on the WEX github account.
+4. Within your new repository code checkout, check that `HTTPS` is selected. Copy the URL given 
+5. Run `git remote remove origin` in your terminal (integrated or CommandPrompt/Windows PowerShell)
+6. Run `git remote add origin <PAT><URL-from-above>` in your terminal (follows the format` https://PAT@github.com/<your-username>/<your-repo-name>.git`).
+7. Run `git remote -v` to verify the remote is correct
+8. Run `git push -u main` to transfer the work experience files to the new repository
+
+### Step 5: Git Config
+
+- Set the git config identity in terminal, replacing "0" with the number of your laptop
+
+```
+$ git config --global user.name "WEX 0"
+$ git config --global user.email work-experience0@outlook.com
+```
+
+### Step 6: Create Virtual Environment
 ```powershell
 python -m venv venv
 
@@ -82,10 +102,11 @@ python -m venv venv
 Set-ExecutionPolicy -Scope CurrentUser Unrestricted
 
 venv\Scripts\activate
+
 pip install -r requirements.txt
 ```
 
-### Step 5: Database Setup
+### Step 7: Database Setup
 ```powershell
 # Setup database schema and data
 make setup-db
@@ -103,7 +124,7 @@ sqlite3 facts.db
 .quit
 ```
 
-### Step 6: Run Application
+### Step 8: Run Application
 ```powershell
 python app.py
 ```
@@ -115,7 +136,10 @@ python app.py
 
 ## Cleanup (Before Distributing to Students)
 
-Delete existing repository files from desktop, so that students can clone the repository themselves through git.
+- Delete existing repository files from desktop, so that students can clone the repository themselves through git.
+- Delete repository created on work experience github account.
+- Clear browsing data.
+
 
 ## Troubleshooting Notes
 - If `make` fails: Run `python database/migrations/migrate.py` directly

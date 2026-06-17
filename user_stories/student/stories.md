@@ -54,7 +54,7 @@ You should now see ```(venv)``` at the beginning of your terminal.
 
 1.  In your terminal at the root (`cd ~`) (integrated VScode or *CommandPrompt/Windows PowerShell), run the command `git clone  https://github.com/jasmine-smith_hpeprod/stem-work-experience-2026.git`, then `cd stem-work-experience-2026`
 
-2. Decide on a repository name (can be anything, doesn't have to follow the stem-work-experience)
+2. Decide on a repository name (can be anything, doesn't have to follow the stem-work-experience convention)
 
 3. Go to `github.com` -> `Profile Icon` -> `Repositories` -> `New`
 
