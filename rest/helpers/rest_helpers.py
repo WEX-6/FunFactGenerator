@@ -16,6 +16,6 @@ def fact_to_json(fact):
         "dislikes": getattr(fact, "dislikes", 0)
     }
 
-def error_response(message, status_code=200):
-    """Returns a JSON error response with the given message and status code."""
-    return jsonify({"error": message}), status_code
+def json_response(message, status_code=200):
+    """Returns a JSON response with the given message and status code."""
+    return jsonify({"message": message}), status_code
