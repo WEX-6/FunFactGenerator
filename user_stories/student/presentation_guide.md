@@ -44,6 +44,7 @@ This guide will help you create a professional presentation about your Random Fu
 - Practice together
 - Don't read slides - use as prompts
 - Ensure everyone speaks
-- **Maintain a level of professionalism, whilst this is a fun project you still need to ensure that you maintain a level of professionalism
-that is suitable for a workplace presentation**
+
+**Remember: ** Maintain a level of professionalism - although this is a fun project, you still need to ensure that you maintain a level of professionalism
+that is suitable for a workplace presentation
 
