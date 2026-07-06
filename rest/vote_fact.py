@@ -1,6 +1,7 @@
 # Task P3.2
 
-# TODO: Import necessary modules
+from flask import request
+from rest.helpers.rest_helpers import json_response
 
 def vote_route():
     data = request.json
@@ -14,6 +15,6 @@ def vote_route():
 
         # TODO: Create the response JSON with fact_id, new_count, likes, and dislikes
         response = {}
-        return jsonify(response), 200 # Return the JSON response with status code 200 for successful vote
-    except ValueError as e: # Catch the ValueError raised by vote_fact for invalid vote types
-        return jsonify({"error": str(e)}), 400
+        return json_response(response, 200)  # Return the JSON response with status code 200 for successful vote
+    except ValueError as err: # Catch the ValueError raised by vote_fact for invalid vote types
+        return json_response(str(err), 400)  # Return the error message with status code 400 for invalid vote type

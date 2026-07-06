@@ -26,7 +26,8 @@ class TestCreateFactRoute:
     def test_create_route_post_success(self, mock_create_fact, app):
         """Test successful POST request with valid data"""
         # ARRANGE
-        mock_fact = None # TODO: (Task P4.7) Create a 'mock_fact' variable with fact and category test data
+        # TODO: (Task P4.7) Create a 'mock_fact' variable with fact and category test data
+        mock_fact = None
         mock_create_fact.return_value = mock_fact
 
         with app.test_request_context('/', method='POST', data={

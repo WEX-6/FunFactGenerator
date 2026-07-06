@@ -2,6 +2,7 @@
 
 from fact import Fact
 from .provider import SQLiteConnectionProvider
+from .helpers.database_helpers import fetch_fact_data
 
 def vote_fact(fact_id: int, vote_type: str) -> Fact:
     provider = SQLiteConnectionProvider()
@@ -15,11 +16,17 @@ def vote_fact(fact_id: int, vote_type: str) -> Fact:
 
         cur.execute() # TODO: Write the SQL query to retrieve the updated fact details for the given fact_id
 
-        result = cur.fetchone()
+        fact_data = fetch_fact_data(cur)
         provider.commit()
-        if result:
-            return Fact() # TODO: Create and return a Fact object using the retrieved data
-        else:
-            return 
-            # TODO: Raise an error if the fact result does not exist in the database
+        if fact_data:
+            return Fact(
+                id=fact_data.id,
+                fact=None,   # TODO: Create and return a Fact object using the retrieved data
+                category=None,
+                likes=0,     # TODO: Include the updated likes count
+                dislikes=0   # TODO: Include the updated dislikes count
+            )
+
+        # TODO: Raise an error if the fact result does not exist in the database
+        return
             
