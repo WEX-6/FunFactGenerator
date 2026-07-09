@@ -5,6 +5,29 @@ Before we begin, let us set up out developer environment. If students are strugg
 
 ## Development Instructions
 
+Mentor note: Use the student guide for exact step-by-step setup instructions: [student/stories.md](../student/stories.md).
+
+### To setup Git
+
+1. Clone the repository:
+
+```git clone <repository-url>```
+
+2. Navigate to the project directory:
+
+```cd stem-work-experience-2026```
+
+3. Verify the clone was successful:
+
+```git status```
+
+You should see the project files and branches available.
+
+Mentor checkpoints (Git setup):
+- Confirm students are in the expected folder after clone by running `pwd` and checking the directory name.
+- If clone fails, ask students to copy the full error message and verify the repository URL format.
+- If `git status` fails, ensure they ran `cd stem-work-experience-2026` first.
+
 ### To setup the virtual environment
 
 1. Create a virtual environment:
