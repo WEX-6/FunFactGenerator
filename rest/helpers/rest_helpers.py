@@ -18,4 +18,6 @@ def fact_to_json(fact):
 
 def json_response(message, status_code=200):
     """Returns a JSON response with the given message and status code."""
+    if isinstance(message, dict):
+        return jsonify(message), status_code
     return jsonify({"message": message}), status_code
