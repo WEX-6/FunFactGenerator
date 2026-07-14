@@ -67,7 +67,8 @@ class TestGetFactRoute:
         with app.test_request_context('/'):
             # ACT
             with pytest.raises(Exception) as exc_info:
-                pass  # TODO: Call the get_route function
+             # TODO: Call the get_route function
+                get_route()
 
             # ASSERT
             # TODO: (Task P0.4) Verify the exception message contains the correct error message

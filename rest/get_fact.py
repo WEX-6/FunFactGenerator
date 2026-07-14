@@ -8,7 +8,7 @@ from rest.helpers.rest_helpers import wants_json, fact_to_json
 def get_route():
     # TODO (TaskP5.3):  Get category from query parameters if provided, or set to None if not provided
     retrievedCategory = None
-
+    
     # TODO (Task P0.2): Call database function to get a random fact
     fact = get_fact()
 
