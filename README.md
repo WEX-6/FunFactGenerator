@@ -43,11 +43,11 @@ The codebase includes comprehensive worksheets and guides covering database conc
 
 1. Create a virtual environment:
 
-```python3 -m venv venv```
+```python3 -m venv .venv```
 
 2. Activate the virtual environment:
 
-```source venv/bin/activate```
+```source .venv/Scripts/activate```
 
 3. Install dependencies:
 
