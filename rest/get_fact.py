@@ -10,14 +10,14 @@ def get_route():
     retrievedCategory = None
 
     # TODO (Task P0.2): Call database function to get a random fact
-    fact = None
+    fact = get_fact()
 
     if wants_json():
-        return fact_to_json(fact) # Return the fact as JSON if requested
+        return fact_to_json() # Return the fact as JSON if requested
     # Render the HTML template and pass the fact data to it
     return render_template(
         "generate.html",
-        None,  # TODO (P0.2): Replace 'None' with the fact variable to pass data to template
-        None  # TODO (P4.4): Pass the category to the template
+        random_fact=fact,  # TODO (P0.2): Replace 'None' with the fact variable to pass data to template
+        category=None  # TODO (P4.4): Pass the category to the template
     )
     # TODO (P4.4): Determine what other data should be passed to the template
