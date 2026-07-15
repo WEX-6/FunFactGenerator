@@ -21,7 +21,7 @@ test-p0:
 ## test-p1: Run P1 unit tests (fact creator).
 .PHONY: test-p1
 test-p1:
-	pytest database/create_fact_test.py rest/create_fact_test.py rest/router_test.py::TestCreateApp::test_create_app_create_route_registration -v
+	pytest -s database/create_fact_test.py rest/create_fact_test.py rest/router_test.py::TestCreateApp::test_create_app_create_route_registration -v
 
 ## test-p3: Run P3 unit tests (voting system).
 .PHONY: test-p3

@@ -97,10 +97,15 @@ class TestCreateFactRoute:
         }):
             # ACT
             # TODO: (Task P1.4) Call the create_route function
-
+            result = create_route()
+            print(10*"=")
+            print(result)
+            print(10*"=")
             # ASSERT
             # TODO: (Task P1.4) Verify the result is a 400 error response
-            pass
+            response, statusCode = result
+            assert response == "Invalid Fact."
+            assert statusCode == 400
 
     @patch('rest.create_fact.create_fact')
     def test_create_route_database_error(self, mock_create_fact, app):
