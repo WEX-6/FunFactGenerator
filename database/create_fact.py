@@ -25,4 +25,4 @@ def create_fact(fact_text) -> Fact:
             likes=0,      # TODO: (Task P3.1) Add likes and dislikes counts to the Fact object
             dislikes=0,   
             category=None # TODO: (Task P4.3) Add category to returned fact
-        )
+        ) 

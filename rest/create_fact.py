@@ -13,6 +13,7 @@ def create_route():
         # TODO: (Task P1.2) Get the fact_text from the form
         text = request.form.get("fact_text", "").strip()
         
+        create_fact(text)
 
         # TODO: (Task P4.5) Get the category from the form
 
